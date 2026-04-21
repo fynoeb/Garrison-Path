@@ -1,27 +1,26 @@
-# funfayct | Premium Roadside Assistance
+# Garrison Path | Emergency Roadside Assistance
 
 **Live Demo:** [https://garrison-path.vercel.app/](https://garrison-path.vercel.app/)
 
 > **Project Status: Work in Progress (WIP)**
-> This application is currently under active development. The live version is an MVP (Minimum Viable Product) demonstrating the UI/UX and frontend functionality. Backend integration and post-service flows (payment & rating) will be added in future updates.
+> This application is currently under active development. The live version is an MVP focused on the frontend user experience. Backend integration and further service expansions are planned for future updates.
 
-## Overview
-A high-end, production-ready web application designed to connect stranded drivers with nearby auto workshops in Padang. The platform is built with a distinctive 1920s vintage aesthetic, featuring a deep dark mode interface with dramatic lighting effects and amber accents. 
+## The Story Behind The Project
+This platform was built out of a real, everyday problem: the anxiety and panic that sets in when your vehicle suddenly breaks down on the road, especially in unfamiliar areas. The primary goal is to eliminate that fear by providing stranded drivers with an immediate lifeline.
 
-This project demonstrates a complete frontend user journey for an emergency roadside assistance service, focusing on mobile-first responsiveness, interactive mapping, and real-time state simulation.
+Beyond helping drivers, this project is designed to empower the local community. It creates a positive economic impact by directing customers to nearby auto workshops. Furthermore, it opens up a new gig economy opportunity—allowing locals to register as "gasoline couriers" (ojek bensin) to deliver emergency fuel to vehicles that run out of gas in the middle of their journey.
 
 ## Core Features
-* **Dynamic Geolocation:** Integrates Leaflet.js (open-source map alternative) to pinpoint user location and display available workshops within a 5km radius in Padang. 
-* **Service Request Flow:** A comprehensive form handling vehicle details, issue categorization, and mock photo uploads, complete with real-time UI status updates ("Searching" to "On The Way").
-* **Live Dispatch Chat:** A simulated, stylized chat interface between the stranded user and the dispatched mechanic.
-* **Safety First Module:** An algorithm-based suggestion tool that displays nearby safe shelters based on coordinates and provides immediate first-aid instructions for the vehicle.
+* **Nearby Discovery:** Uses geolocation to instantly find and display local mechanics and workshops within a 5km radius.
+* **Emergency Service Request:** A quick form for users to report their vehicle issue (engine failure, flat tire, out of gas) and request immediate assistance or fuel delivery.
+* **Live Dispatch Chat:** A simulated real-time communication interface between the stranded driver and the responding mechanic or courier.
+* **Safety Directives:** Automatically suggests nearby safe shelters based on the user's coordinates and provides first-aid instructions for the vehicle while they wait.
 
 ## Technical Stack
 * **Framework:** Next.js 14 (App Router)
 * **Styling:** Tailwind CSS
-* **Map Engine:** Leaflet.js via `react-leaflet` (Implemented with dynamic imports and `ssr: false` to ensure seamless compatibility with Next.js Server-Side Rendering).
-* **Icons:** Lucide-react
-* **Typography:** Playfair Display (Headers) & Inter (Body) via Google Fonts.
+* **Map Integration:** Leaflet.js via `react-leaflet` 
+* **Icons & Typography:** Lucide-react, Playfair Display & Inter (Google Fonts)
 
 ## Local Installation
 
