@@ -3,7 +3,7 @@
 **Live Demo:** [https://garrison-path.vercel.app/](https://garrison-path.vercel.app/)
 
 > **Project Status: Work in Progress (WIP)**
-> Aplikasi ini saat ini masih dalam tahap pengembangan aktif. Versi yang live sekarang adalah MVP (Minimum Viable Product) untuk mendemonstrasikan UI/UX dan fungsionalitas frontend. Integrasi backend dan alur pasca-servis (pembayaran & rating) akan ditambahkan pada pembaruan mendatang.
+> This application is currently under active development. The live version is an MVP (Minimum Viable Product) demonstrating the UI/UX and frontend functionality. Backend integration and post-service flows (payment & rating) will be added in future updates.
 
 ## Overview
 A high-end, production-ready web application designed to connect stranded drivers with nearby auto workshops in Padang. The platform is built with a distinctive 1920s vintage aesthetic, featuring a deep dark mode interface with dramatic lighting effects and amber accents. 
