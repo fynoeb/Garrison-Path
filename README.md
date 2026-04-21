@@ -22,5 +22,8 @@ Beyond helping drivers, this project is designed to empower the local community.
 * **Map Integration:** Leaflet.js via `react-leaflet` 
 * **Icons & Typography:** Lucide-react, Playfair Display & Inter (Google Fonts)
 
----
-*Built by funfayct*
+## License
+
+**Copyright (c) 2026 funfayct. All rights reserved.**
+
+This project is proprietary and closed-source. You may view the code for portfolio and technical assessment purposes only. Copying, cloning, distributing, modifying, or using this code for any commercial or non-commercial purpose without explicit written permission from the author is strictly prohibited.
