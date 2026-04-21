@@ -1,20 +1,49 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# funfayct | Premium Roadside Assistance
 
-# Run and deploy your AI Studio app
+**Live Demo:** [https://garrison-path.vercel.app/](https://garrison-path.vercel.app/)
 
-This contains everything you need to run your app locally.
+> **Project Status: Work in Progress (WIP)**
+> Aplikasi ini saat ini masih dalam tahap pengembangan aktif. Versi yang live sekarang adalah MVP (Minimum Viable Product) untuk mendemonstrasikan UI/UX dan fungsionalitas frontend. Integrasi backend dan alur pasca-servis (pembayaran & rating) akan ditambahkan pada pembaruan mendatang.
 
-View your app in AI Studio: https://ai.studio/apps/0dbdcb8d-b6f1-4e08-abc0-b3c4b8b44e3f
+## Overview
+A high-end, production-ready web application designed to connect stranded drivers with nearby auto workshops in Padang. The platform is built with a distinctive 1920s vintage aesthetic, featuring a deep dark mode interface with dramatic lighting effects and amber accents. 
 
-## Run Locally
+This project demonstrates a complete frontend user journey for an emergency roadside assistance service, focusing on mobile-first responsiveness, interactive mapping, and real-time state simulation.
 
-**Prerequisites:**  Node.js
+## Core Features
+* **Dynamic Geolocation:** Integrates Leaflet.js (open-source map alternative) to pinpoint user location and display available workshops within a 5km radius in Padang. 
+* **Service Request Flow:** A comprehensive form handling vehicle details, issue categorization, and mock photo uploads, complete with real-time UI status updates ("Searching" to "On The Way").
+* **Live Dispatch Chat:** A simulated, stylized chat interface between the stranded user and the dispatched mechanic.
+* **Safety First Module:** An algorithm-based suggestion tool that displays nearby safe shelters based on coordinates and provides immediate first-aid instructions for the vehicle.
 
+## Technical Stack
+* **Framework:** Next.js 14 (App Router)
+* **Styling:** Tailwind CSS
+* **Map Engine:** Leaflet.js via `react-leaflet` (Implemented with dynamic imports and `ssr: false` to ensure seamless compatibility with Next.js Server-Side Rendering).
+* **Icons:** Lucide-react
+* **Typography:** Playfair Display (Headers) & Inter (Body) via Google Fonts.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Local Installation
+
+To run this project locally on your machine:
+
+1.  Clone the repository:
+    ```bash
+    git clone [https://github.com/fynoeb/Garrison-Path.git](https://github.com/fynoeb/Garrison-Path.git)
+    ```
+2.  Navigate to the project directory:
+    ```bash
+    cd Garrison-Path
+    ```
+3.  Install dependencies:
+    ```bash
+    npm install
+    ```
+4.  Run the development server:
+    ```bash
+    npm run dev
+    ```
+5.  Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
+
+---
+*Built by funfayct*
