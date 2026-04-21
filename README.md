@@ -22,27 +22,5 @@ Beyond helping drivers, this project is designed to empower the local community.
 * **Map Integration:** Leaflet.js via `react-leaflet` 
 * **Icons & Typography:** Lucide-react, Playfair Display & Inter (Google Fonts)
 
-## Local Installation
-
-To run this project locally on your machine:
-
-1.  Clone the repository:
-    ```bash
-    git clone [https://github.com/fynoeb/Garrison-Path.git](https://github.com/fynoeb/Garrison-Path.git)
-    ```
-2.  Navigate to the project directory:
-    ```bash
-    cd Garrison-Path
-    ```
-3.  Install dependencies:
-    ```bash
-    npm install
-    ```
-4.  Run the development server:
-    ```bash
-    npm run dev
-    ```
-5.  Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
-
 ---
 *Built by funfayct*
