@@ -3,27 +3,30 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Send, ShieldCheck } from 'lucide-react';
+import { Send, ShieldCheck, ArrowRight, Loader2 } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { cn } from '../lib/utils';
 import { useLanguage } from '../LanguageContext';
 import { useService } from '../ServiceContext';
 import { useUser } from '../UserContext';
 import { motion, AnimatePresence } from 'motion/react';
+import { useNavigate } from 'react-router-dom';
 import React from 'react';
 
 export default function ChatSystem() {
   const { t } = useLanguage();
   const { mission, sendMessage } = useService();
-  const { role } = useUser();
+  const { role, user } = useUser();
+  const navigate = useNavigate();
   const [input, setInput] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [mission.messages]);
+  }, [mission.messages, isTyping]);
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,20 +38,33 @@ export default function ChatSystem() {
 
   if (mission.status === 'idle') {
     return (
-      <div className="glass-card flex flex-col h-[500px] items-center justify-center p-12 text-center space-y-6">
+      <div className="glass-card flex flex-col h-[500px] items-center justify-center p-12 text-center space-y-8 animate-slide-up">
         <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center text-zinc-600">
           <ShieldCheck size={32} />
         </div>
         <div className="space-y-2">
-          <h3 className="font-black text-sm uppercase tracking-widest text-zinc-400">No Active Link</h3>
-          <p className="text-xs text-zinc-600 max-w-xs">{role === 'driver' ? 'Submit a mission request to establish an encrypted link with a mechanic.' : 'Wait for an incoming signal to open a secure channel.'}</p>
+          <h3 className="font-black text-sm uppercase tracking-widest text-zinc-400">{t.noActiveChat}</h3>
+          <p className="text-xs text-zinc-600 max-w-xs mx-auto">
+            {role === 'driver' 
+              ? 'Silakan buat permintaan bantuan untuk terhubung dengan mekanik kami.' 
+              : 'Menunggu sinyal permintaan bantuan untuk membuka saluran komunikasi.'}
+          </p>
         </div>
+        {role === 'driver' && (
+          <button 
+            onClick={() => navigate('/')}
+            className="garrison-btn-primary px-8 py-4 flex items-center gap-3 text-xs tracking-widest"
+          >
+            {t.goToRequest}
+            <ArrowRight size={14} />
+          </button>
+        )}
       </div>
     );
   }
 
   return (
-    <div className="glass-card flex flex-col h-[600px] overflow-hidden relative">
+    <div className="glass-card flex flex-col h-[600px] overflow-hidden relative animate-slide-up">
       {/* Chat Header */}
       <div className="p-6 border-b border-white/5 flex items-center justify-between bg-white/[0.02]">
         <div className="flex items-center gap-4">
@@ -59,15 +75,19 @@ export default function ChatSystem() {
             <div className="absolute -bottom-1 -right-1 status-pulse border-2 border-[#050505]" />
           </div>
           <div>
-            <h3 className="font-black text-sm uppercase tracking-widest text-glow">{t.chatTitle}</h3>
+            <h3 className="font-black text-sm uppercase tracking-widest text-glow">
+              {role !== 'driver' ? `${mission.vehicle || 'Driver'} Signal` : t.chatTitle}
+            </h3>
             <div className="flex items-center gap-2">
-              <span className="text-[9px] font-black text-zinc-600 tracking-tighter uppercase">{t.encrypted}</span>
+              <span className="text-[9px] font-black text-zinc-600 tracking-tighter uppercase">
+                {role !== 'driver' ? (mission.issue || t.encrypted) : t.encrypted}
+              </span>
             </div>
           </div>
         </div>
         <div className="hidden sm:block text-right">
-           <div className="text-[10px] font-black text-garrison-blue uppercase tracking-widest">{mission.id || 'SEC_LINK'}</div>
-           <div className="text-[8px] text-zinc-600 font-bold uppercase tracking-widest">Authenticated Perspective: {role.toUpperCase()}</div>
+           <div className="text-[10px] font-black text-garrison-blue uppercase tracking-widest">{mission.id || 'LINK_ID'}</div>
+           <div className="text-[8px] text-zinc-600 font-bold uppercase tracking-widest">{t.currentRole}: {role.toUpperCase()}</div>
         </div>
       </div>
 
@@ -77,9 +97,18 @@ export default function ChatSystem() {
         className="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth"
       >
         <AnimatePresence initial={false}>
-          {mission.messages.length > 0 ? (
+          {mission.messages && mission.messages.length > 0 ? (
             mission.messages.map((m) => {
-              const isOwnMessage = (role === 'driver' && m.sender === 'user') || (role === 'workshop' && m.sender === 'mechanic');
+              // m.senderRole is 'driver', 'workshop', or 'operative'
+              const isOwnMessage = m.senderId === user?.id;
+              
+              const getSenderLabel = (m: any) => {
+                if (m.senderId === mission.driverId) return t.user;
+                if (m.senderRole === 'fuel-partner') return t.fuelPartner;
+                if (m.senderRole === 'workshop') return t.operative;
+                return t.operative;
+              };
+
               return (
                 <motion.div
                   key={m.id}
@@ -92,7 +121,7 @@ export default function ChatSystem() {
                 >
                   <div className="flex items-center gap-2 mb-2 px-1">
                     <span className="text-[8px] font-black text-zinc-600 uppercase tracking-widest">
-                      {m.sender === 'mechanic' ? t.operative : t.user}
+                      {getSenderLabel(m)}
                     </span>
                   </div>
                   
@@ -111,8 +140,23 @@ export default function ChatSystem() {
           ) : (
             <div className="h-full flex flex-col items-center justify-center opacity-20 py-20 grayscale">
                <ShieldCheck size={48} className="mb-4" />
-               <span className="text-[10px] font-black uppercase tracking-[0.4em]">Establishing Sync...</span>
+               <span className="text-[10px] font-black uppercase tracking-[0.4em]">{t.dispatchStatus}</span>
             </div>
+          )}
+          
+          {isTyping && (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="flex items-center gap-2 text-zinc-600 ml-1"
+            >
+              <div className="flex gap-1">
+                <span className="w-1.5 h-1.5 bg-garrison-blue/40 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                <span className="w-1.5 h-1.5 bg-garrison-blue/40 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                <span className="w-1.5 h-1.5 bg-garrison-blue/40 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+              </div>
+              <span className="text-[8px] font-black uppercase tracking-widest">{t.mechanicTyping}</span>
+            </motion.div>
           )}
         </AnimatePresence>
       </div>

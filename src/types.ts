@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export type UserRole = 'driver' | 'workshop';
+export type UserRole = 'driver' | 'workshop' | 'fuel-partner';
 
 export interface UserProfile {
   id: string;
@@ -12,6 +12,10 @@ export interface UserProfile {
   role: UserRole;
   avatar?: string;
   phone?: string;
+  isNew?: boolean;
+  isAvailable?: boolean;
+  rating?: number;
+  ratingCount?: number;
   vehicle?: {
     brand: string;
     series: string;
@@ -35,12 +39,16 @@ export interface Workshop {
   suitableFor?: ('car' | 'motorcycle')[];
 }
 
+export type ServiceCategory = 'emergency' | 'home-service' | 'fuel-delivery';
+
 export interface ServiceRequest {
   id: string;
   userId: string;
   vehicleBrand: string;
   vehicleSeries: string;
   issueCategory: 'Engine' | 'Flat Tire' | 'Battery' | 'Fuel' | 'Other';
+  serviceCategory: ServiceCategory;
+  paymentMethod: 'cash' | 'wallet';
   description: string;
   status: 'Searching' | 'Found' | 'On The Way' | 'Ongoing' | 'Completed';
   workshopId?: string;
@@ -49,7 +57,9 @@ export interface ServiceRequest {
 
 export interface Message {
   id: string;
-  sender: 'user' | 'mechanic';
+  senderId?: string;
+  senderRole?: 'driver' | 'workshop';
+  sender: 'user' | 'mechanic'; // Legacy support
   text: string;
   timestamp: string;
 }

@@ -37,7 +37,7 @@ export async function fetchNearbyWorkshops(lat: number, lng: number, radius: num
         lat: el.lat || el.center?.lat,
         lng: el.lon || el.center?.lon,
         address: fullAddress || 'Padang Area Location',
-        rating: 4.0 + (Math.random() * 1.0),
+        rating: 4.5,
         services: ['Engine Repair', 'Maintenance', 'Emergency Service'],
         photo: `https://picsum.photos/seed/${el.id}/400/250`,
         mapsUrl: `https://www.openstreetmap.org/?mlat=${el.lat || el.center?.lat}&mlon=${el.lon || el.center?.lon}#map=17/${el.lat || el.center?.lat}/${el.lon || el.center?.lon}`,

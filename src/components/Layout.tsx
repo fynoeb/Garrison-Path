@@ -13,15 +13,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const { t, language, setLanguage } = useLanguage();
-  const { user, role } = useUser();
+  const { user, role, isLoggedIn, signOut } = useUser();
   const { mission } = useService();
 
   const navItems = [
-    { name: role === 'workshop' ? 'Terminal' : t.nav.request, path: '/', icon: Home, show: true, mobile: true },
-    { name: t.nav.hq, path: '/dashboard', icon: ClipboardList, show: role === 'workshop', mobile: true },
-    { name: t.nav.safety, path: '/safety', icon: Shield, show: role === 'driver', mobile: true },
-    { name: t.nav.chat, path: '/chat', icon: MessageSquare, show: true, mobile: true },
-    { name: t.nav.profile, path: '/profile', icon: User, show: true, mobile: true },
+    { name: role === 'workshop' || role === 'fuel-partner' ? 'Terminal' : t.nav.request, path: role === 'workshop' || role === 'fuel-partner' ? '/dashboard?tab=terminal' : '/', icon: Home, show: isLoggedIn, mobile: true },
+    { name: t.nav.hq, path: '/dashboard?tab=hq', icon: ClipboardList, show: (isLoggedIn && (role === 'workshop' || role === 'fuel-partner')), mobile: true },
+    { name: t.nav.safety, path: '/safety', icon: Shield, show: isLoggedIn && role === 'driver', mobile: true },
+    { name: t.nav.chat, path: '/chat', icon: MessageSquare, show: isLoggedIn, mobile: true },
+    { name: t.nav.profile, path: '/profile', icon: User, show: isLoggedIn, mobile: true },
   ];
 
   const isActiveMission = mission.status !== 'idle';
@@ -59,7 +59,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   </div>
                </div>
                <div className="flex items-center gap-2 text-garrison-blue text-[9px] font-black uppercase tracking-widest group-hover:gap-4 transition-all">
-                  {role === 'workshop' ? 'Active Protocol' : 'View Track'} <ArrowRight size={10} />
+                  {role === 'workshop' ? t.activeProtocol : t.viewTrack} <ArrowRight size={10} />
                </div>
             </Link>
           </motion.div>
@@ -117,15 +117,30 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </button>
             </div>
 
-            <Link to="/profile" className="hidden sm:flex items-center gap-2 group">
-               <div className="w-8 h-8 rounded-full border border-white/20 overflow-hidden group-hover:border-garrison-blue/50 transition-colors bg-white/5">
-                  {user?.avatar ? (
-                    <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-zinc-600"><User size={14} /></div>
-                  )}
-               </div>
-            </Link>
+            {isLoggedIn && (
+              <div className="flex items-center gap-3">
+                <Link to="/profile" className="flex items-center gap-2 group">
+                  <div className="w-8 h-8 rounded-full border border-white/20 overflow-hidden group-hover:border-garrison-blue/50 transition-colors bg-white/5">
+                    {user?.avatar ? (
+                      <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-zinc-600"><User size={14} /></div>
+                    )}
+                  </div>
+                  <div className="hidden md:flex flex-col">
+                    <span className="text-[10px] font-black text-white uppercase tracking-tighter leading-none">{user?.name}</span>
+                    <span className="text-[8px] font-bold text-garrison-blue/60 uppercase tracking-widest">{user?.role}</span>
+                  </div>
+                </Link>
+                <button 
+                  onClick={signOut}
+                  className="p-2 border border-white/5 hover:bg-white/5 rounded-lg transition-colors text-zinc-500 hover:text-white"
+                  title="Sign Out"
+                >
+                  <LogIn className="w-4 h-4 rotate-180" />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </header>

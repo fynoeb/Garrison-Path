@@ -89,21 +89,24 @@ export default function MapSection() {
            <div className="text-[8px] text-zinc-500 font-bold uppercase tracking-widest leading-none">
              SENSORS: {mission.status.toUpperCase()}
            </div>
+           <div className="text-[8px] text-zinc-500 font-bold uppercase tracking-widest leading-none mt-1.5">
+             SERVICE: {mission.serviceCategory?.toUpperCase() || 'EMERGENCY'}
+           </div>
         </div>
 
         {/* Legend */}
         <div className="glass-card p-3 bg-black/60 backdrop-blur-md space-y-2">
            <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded bg-[#00f2ff] flex items-center justify-center text-[7px] font-black text-black">W</div>
-              <span className="text-[7px] font-black text-zinc-400 uppercase tracking-widest">Workshop</span>
+              <span className="text-[7px] font-black text-zinc-400 uppercase tracking-widest">{t.legendWorkshop}</span>
            </div>
            <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded bg-[#ff9f0a] flex items-center justify-center text-[7px] font-black text-black">F</div>
-              <span className="text-[7px] font-black text-zinc-400 uppercase tracking-widest">Fuel</span>
+              <span className="text-[7px] font-black text-zinc-400 uppercase tracking-widest">{t.legendFuel}</span>
            </div>
            <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded bg-[#10b981] flex items-center justify-center text-[7px] font-black text-black">P</div>
-              <span className="text-[7px] font-black text-zinc-400 uppercase tracking-widest">Rest Stop</span>
+              <span className="text-[7px] font-black text-zinc-400 uppercase tracking-widest">{t.legendRest}</span>
            </div>
         </div>
       </div>
@@ -164,7 +167,7 @@ export default function MapSection() {
                         href={`tel:${shop.phone}`} 
                         className="flex-1 px-2 py-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded flex items-center justify-center gap-1 transition-colors no-underline"
                       >
-                        <span className="text-[8px] font-black text-white uppercase tracking-widest">Call</span>
+                        <span className="text-[8px] font-black text-white uppercase tracking-widest">{t.call}</span>
                       </a>
                     )}
                     {shop.mapsUrl && (
@@ -174,7 +177,7 @@ export default function MapSection() {
                         rel="noopener noreferrer"
                         className="flex-1 px-2 py-1 bg-garrison-blue/20 hover:bg-garrison-blue/30 border border-garrison-blue/30 rounded flex items-center justify-center gap-1 transition-colors no-underline"
                       >
-                        <span className="text-[8px] font-black text-garrison-blue uppercase tracking-widest text-center">Directions</span>
+                        <span className="text-[8px] font-black text-garrison-blue uppercase tracking-widest text-center">{t.directions}</span>
                       </a>
                     )}
                   </div>
@@ -244,7 +247,7 @@ export default function MapSection() {
                         rel="noopener noreferrer"
                         className="w-full px-2 py-1 bg-yellow-400/10 hover:bg-yellow-400/20 border border-yellow-400/30 rounded flex items-center justify-center transition-colors no-underline"
                       >
-                        <span className="text-[8px] font-black text-yellow-400 uppercase tracking-widest">Directions</span>
+                        <span className="text-[8px] font-black text-yellow-400 uppercase tracking-widest">{t.directions}</span>
                       </a>
                     </div>
                   )}
@@ -256,7 +259,7 @@ export default function MapSection() {
 
         <Marker position={[mission.userLocation.lat, mission.userLocation.lng]} icon={userIcon}>
           <Popup>
-            <div className="text-[10px] uppercase font-black tracking-widest text-white">Your Unit Position</div>
+            <div className="text-[10px] uppercase font-black tracking-widest text-white">{t.yourPosition}</div>
           </Popup>
         </Marker>
 
@@ -271,7 +274,7 @@ export default function MapSection() {
             />
             <Marker position={[mission.operativeLocation.lat, mission.operativeLocation.lng]} icon={operativeIcon}>
               <Popup>
-                <div className="text-[10px] uppercase font-black tracking-widest text-garrison-blue">Operative (ETA: {mission.eta})</div>
+                <div className="text-[10px] uppercase font-black tracking-widest text-garrison-blue">{t.operative} (ETA: {mission.eta})</div>
               </Popup>
             </Marker>
           </>

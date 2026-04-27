@@ -3,8 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MapPin, ShieldAlert, Zap, Lock, Navigation } from 'lucide-react';
-import { MOCK_SAFE_SPOTS } from '../constants';
+import { MapPin, ShieldAlert, Zap, Lock, Navigation, ExternalLink } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
 import { useService } from '../ServiceContext';
 import { cn } from '../lib/utils';
@@ -15,6 +14,11 @@ export default function SafetyInstructions() {
   const { mission, safeSpots } = useService();
   
   const vType = mission.vehicleType || 'car';
+
+  const handleGetDirections = (spot: { lat: number, lng: number }) => {
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${spot.lat},${spot.lng}`;
+    window.open(url, '_blank', 'noreferrer');
+  };
 
   // Filter spots within 500m and suitable for the vehicle
   const nearbySpots = safeSpots.filter(spot => {
@@ -68,28 +72,35 @@ export default function SafetyInstructions() {
 
           <div className="space-y-4">
             {nearbySpots.length > 0 ? nearbySpots.map((spot) => (
-              <div key={spot.id} className="p-4 bg-white/[0.02] border border-white/5 rounded-2xl flex items-start gap-4 group hover:bg-white/[0.04] transition-all">
+              <button 
+                key={spot.id} 
+                onClick={() => handleGetDirections(spot)}
+                className="w-full text-left p-4 bg-white/[0.02] border border-white/5 rounded-2xl flex items-start gap-4 group hover:bg-white/[0.04] hover:border-garrison-blue/20 transition-all cursor-pointer"
+              >
                 <div className="p-3 rounded-xl bg-garrison-blue/5 border border-garrison-blue/20 group-hover:bg-garrison-blue group-hover:text-black transition-all">
                    <MapPin size={18} />
                 </div>
-                <div className="space-y-1">
-                  <h4 className="text-sm font-bold text-white tracking-tight">{spot.name}</h4>
+                <div className="space-y-1 flex-1">
+                  <div className="flex justify-between items-start">
+                    <h4 className="text-sm font-bold text-white tracking-tight">{spot.name}</h4>
+                    <ExternalLink size={12} className="text-zinc-600 group-hover:text-garrison-blue opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
                   <p className="text-[10px] text-zinc-500 font-medium">{spot.address}</p>
                   <div className="flex items-center gap-2 mt-2">
                     <span className="garrison-badge bg-garrison-blue/10 text-garrison-blue border border-garrison-blue/20">
                       {t.safeSpotLabel}
                     </span>
                     <span className="text-[8px] font-black text-garrison-blue uppercase tracking-widest bg-garrison-blue/5 px-2 py-0.5 rounded border border-garrison-blue/10">
-                      {vType === 'car' ? 'Car Authorized' : 'Moto Authorized'}
+                      {vType === 'car' ? t.vehicleCar : t.vehicleMotor} {t.activeProtocol}
                     </span>
                     <span className="text-[8px] font-black text-zinc-700 uppercase tracking-widest">{spot.type}</span>
                   </div>
                 </div>
-              </div>
+              </button>
             )) : (
               <div className="flex flex-col items-center justify-center py-12 text-center opacity-20 grayscale">
                  <Navigation className="mb-4" size={32} />
-                 <span className="text-[10px] font-black uppercase tracking-widest text-white">No spots within 500m</span>
+                 <span className="text-[10px] font-black uppercase tracking-widest text-white">{t.noSpotsNearby}</span>
               </div>
             )}
           </div>
