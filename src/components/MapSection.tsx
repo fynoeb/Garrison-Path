@@ -1,7 +1,7 @@
 import { MapContainer, TileLayer, Marker, Popup, Polyline, Tooltip, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { PADANG_CENTER } from '../constants';
+import { BASE_COORDINATES } from '../constants';
 import { useLanguage } from '../LanguageContext';
 import { useService } from '../ServiceContext';
 import { useEffect } from 'react';
@@ -112,7 +112,7 @@ export default function MapSection() {
       </div>
 
       <MapContainer 
-        center={PADANG_CENTER} 
+        center={BASE_COORDINATES} 
         zoom={13} 
         className="h-full w-full"
         zoomControl={false}

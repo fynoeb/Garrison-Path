@@ -5,7 +5,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Message, Workshop, SafeSpot } from './types';
-import { PADANG_CENTER, MOCK_WORKSHOPS, MOCK_SAFE_SPOTS } from './constants';
+import { BASE_COORDINATES, MOCK_WORKSHOPS, MOCK_SAFE_SPOTS } from './constants';
 import { fetchNearbyWorkshops, fetchNearbySafeSpots } from './services/overpassService';
 import { fetchGoogleWorkshops, fetchGoogleSafeSpots } from './services/googleMapsService';
 import { db } from './lib/firebase';
@@ -133,8 +133,8 @@ interface ServiceContextType {
 const INITIAL_STATE: MissionState = {
   id: null,
   status: 'idle',
-  userLocation: PADANG_CENTER,
-  operativeLocation: { lat: PADANG_CENTER.lat + 0.02, lng: PADANG_CENTER.lng + 0.02 },
+  userLocation: BASE_COORDINATES,
+  operativeLocation: { lat: BASE_COORDINATES.lat + 0.02, lng: BASE_COORDINATES.lng + 0.02 },
   serviceCategory: 'emergency',
   paymentMethod: 'cash',
   issue: '',
@@ -355,7 +355,7 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
         loadRealVenues(latitude, longitude);
       }, (error) => {
         console.warn("Geolocation denied, using center", error);
-        loadRealVenues(PADANG_CENTER.lat, PADANG_CENTER.lng);
+        loadRealVenues(BASE_COORDINATES.lat, BASE_COORDINATES.lng);
       });
     }
   };
@@ -459,7 +459,7 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
       await addDoc(msgRef, {
         senderId: workshopId,
         senderRole: 'workshop',
-        text: 'Signal accepted. I am moving to your coordinates now.',
+        text: 'Pesanan diterima. Saya sedang menuju lokasi Anda.',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         createdAt: serverTimestamp()
       });

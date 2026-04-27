@@ -22,7 +22,7 @@ export async function fetchNearbyWorkshops(lat: number, lng: number, radius: num
       const street = tags['addr:street'] || tags['addr:full'] || '';
       const housenumber = tags['addr:housenumber'] || '';
       const suburb = tags['addr:suburb'] || '';
-      const city = tags['addr:city'] || 'Padang';
+      const city = tags['addr:city'] || '';
       
       const fullAddress = street 
         ? `${street} ${housenumber}${suburb ? ', ' + suburb : ''}, ${city}`.trim()
@@ -36,7 +36,7 @@ export async function fetchNearbyWorkshops(lat: number, lng: number, radius: num
         name: tags.name || 'Anonymous Workshop',
         lat: el.lat || el.center?.lat,
         lng: el.lon || el.center?.lon,
-        address: fullAddress || 'Padang Area Location',
+        address: fullAddress || 'Service Area Location',
         rating: 4.5,
         services: ['Engine Repair', 'Maintenance', 'Emergency Service'],
         photo: `https://picsum.photos/seed/${el.id}/400/250`,

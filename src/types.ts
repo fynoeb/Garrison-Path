@@ -3,6 +3,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+export interface BrandData {
+  [brand: string]: string[];
+}
+
+export interface VehicleCatalog {
+  car: BrandData;
+  motorcycle: BrandData;
+}
+
 export type UserRole = 'driver' | 'workshop' | 'fuel-partner';
 
 export interface UserProfile {

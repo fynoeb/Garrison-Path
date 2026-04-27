@@ -46,8 +46,8 @@ export default function ChatSystem() {
           <h3 className="font-black text-sm uppercase tracking-widest text-zinc-400">{t.noActiveChat}</h3>
           <p className="text-xs text-zinc-600 max-w-xs mx-auto">
             {role === 'driver' 
-              ? 'Silakan buat permintaan bantuan untuk terhubung dengan mekanik kami.' 
-              : 'Menunggu sinyal permintaan bantuan untuk membuka saluran komunikasi.'}
+              ? 'Silakan buat permintaan bantuan untuk terhubung dengan montir kami.' 
+              : 'Menunggu pesanan bantuan untuk membuka saluran chat.'}
           </p>
         </div>
         {role === 'driver' && (
@@ -76,7 +76,7 @@ export default function ChatSystem() {
           </div>
           <div>
             <h3 className="font-black text-sm uppercase tracking-widest text-glow">
-              {role !== 'driver' ? `${mission.vehicle || 'Driver'} Signal` : t.chatTitle}
+              {role !== 'driver' ? `Mogok: ${mission.vehicle || 'Pengemudi'}` : t.chatTitle}
             </h3>
             <div className="flex items-center gap-2">
               <span className="text-[9px] font-black text-zinc-600 tracking-tighter uppercase">

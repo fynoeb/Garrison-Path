@@ -12,6 +12,7 @@ import { cn } from '../lib/utils';
 import { useService } from '../ServiceContext';
 import { db } from '../lib/firebase';
 import { collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
+import { VEHICLE_DATA } from '../constants';
 
 export default function Profile() {
   const { user, role, updateProfile } = useUser();
@@ -28,6 +29,7 @@ export default function Profile() {
     phone: user?.phone || '',
     brand: user?.vehicle?.brand || '',
     series: user?.vehicle?.series || '',
+    vType: user?.vehicle?.type || 'car',
     workshopName: user?.workshopName || ''
   });
 
@@ -39,6 +41,7 @@ export default function Profile() {
         phone: user?.phone || '',
         brand: user?.vehicle?.brand || '',
         series: user?.vehicle?.series || '',
+        vType: user?.vehicle?.type || 'car',
         workshopName: user?.workshopName || ''
       });
     }
@@ -80,7 +83,7 @@ export default function Profile() {
     updateProfile({
       name: formData.name,
       phone: formData.phone,
-      vehicle: role === 'driver' ? { brand: formData.brand, series: formData.series } : user?.vehicle,
+      vehicle: role === 'driver' ? { brand: formData.brand, series: formData.series, type: formData.vType as 'car' | 'motorcycle' } : user?.vehicle,
       workshopName: role === 'workshop' ? formData.workshopName : user?.workshopName
     });
     setSaved(true);
@@ -171,15 +174,35 @@ export default function Profile() {
               <Car className="text-garrison-blue" size={20} />
               <h3 className="font-bold text-sm uppercase tracking-widest">{t.divisionDetails}</h3>
            </div>
-           <div className="grid grid-cols-2 gap-8">
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="space-y-1">
+                 <span className="text-[10px] uppercase text-zinc-600 font-bold tracking-widest">{t.vehicleType}</span>
+                 {isEditing ? (
+                   <select 
+                     value={formData.vType}
+                     onChange={(e) => setFormData(prev => ({ ...prev, vType: e.target.value as any, brand: '', series: '' }))}
+                     className="garrison-input text-sm p-2 appearance-none bg-zinc-900/50"
+                   >
+                     <option value="car">{t.vehicleCar}</option>
+                     <option value="motorcycle">{t.vehicleMotor}</option>
+                   </select>
+                 ) : (
+                   <p className="text-md font-bold text-zinc-200 uppercase">{formData.vType}</p>
+                 )}
+              </div>
               <div className="space-y-1">
                  <span className="text-[10px] uppercase text-zinc-600 font-bold tracking-widest">{t.carBrand}</span>
                  {isEditing ? (
-                   <input 
+                   <select 
                      value={formData.brand}
-                     onChange={(e) => setFormData(prev => ({ ...prev, brand: e.target.value }))}
-                     className="garrison-input text-sm p-2"
-                   />
+                     onChange={(e) => setFormData(prev => ({ ...prev, brand: e.target.value, series: '' }))}
+                     className="garrison-input text-sm p-2 appearance-none bg-zinc-900/50"
+                   >
+                     <option value="">-- Pilih Merek --</option>
+                     {Object.keys(VEHICLE_DATA[formData.vType as 'car' | 'motorcycle']).map(b => (
+                       <option key={b} value={b}>{b}</option>
+                     ))}
+                   </select>
                  ) : (
                    <p className="text-md font-bold text-zinc-200">{user.vehicle?.brand || '-'}</p>
                  )}
@@ -187,11 +210,18 @@ export default function Profile() {
               <div className="space-y-1">
                  <span className="text-[10px] uppercase text-zinc-600 font-bold tracking-widest">{t.carModel}</span>
                  {isEditing ? (
-                   <input 
+                   <select 
                      value={formData.series}
                      onChange={(e) => setFormData(prev => ({ ...prev, series: e.target.value }))}
-                     className="garrison-input text-sm p-2"
-                   />
+                     className="garrison-input text-sm p-2 appearance-none bg-zinc-900/50"
+                     disabled={!formData.brand || formData.brand === 'Other'}
+                   >
+                     <option value="">-- Pilih Model --</option>
+                     {formData.brand && formData.brand !== 'Other' && VEHICLE_DATA[formData.vType as 'car' | 'motorcycle'][formData.brand as keyof typeof VEHICLE_DATA['car']].map(m => (
+                       <option key={m} value={m}>{m}</option>
+                     ))}
+                     <option value="Other">Lainnya...</option>
+                   </select>
                  ) : (
                    <p className="text-md font-bold text-zinc-200">{user.vehicle?.series || '-'}</p>
                  )}

@@ -155,7 +155,7 @@ export default function LoginPage() {
                 {[
                   { id: 'driver', label: 'Driver / Pengguna', icon: User, desc: 'Butuh bantuan di jalan' },
                   { id: 'workshop', label: 'Bengkel / Mekanik', icon: Wrench, desc: 'Memberi layanan perbaikan' },
-                  { id: 'fuel-partner', label: 'Fuel Partner', icon: Fuel, desc: 'Layanan antar bensin' }
+                  { id: 'fuel-partner', label: 'Mitra Bensin', icon: Fuel, desc: 'Layanan antar bensin' }
                 ].map((item) => (
                   <button
                     key={item.id}
@@ -325,16 +325,7 @@ export default function LoginPage() {
           )}
         </form>
 
-        <div className="pt-6 border-t border-zinc-900 flex justify-center gap-8 opacity-40">
-           <div className="flex items-center gap-2">
-              <ShieldCheck className="w-3 h-3 text-zinc-500" />
-              <span className="text-[8px] font-black uppercase text-zinc-500 tracking-widest">Encrypted</span>
-           </div>
-           <div className="flex items-center gap-2">
-              <ShieldCheck className="w-3 h-3 text-zinc-500" />
-              <span className="text-[8px] font-black uppercase text-zinc-500 tracking-widest">Verified</span>
-           </div>
-        </div>
+        {/* Removed decorative footer */}
       </div>
     </div>
   );

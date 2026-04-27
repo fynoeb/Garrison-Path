@@ -13,6 +13,7 @@ import { useBlocker } from 'react-router-dom';
 import React from 'react';
 import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import { VEHICLE_DATA } from '../constants';
 
 export default function RequestForm() {
   const { t, language } = useLanguage();
@@ -24,6 +25,8 @@ export default function RequestForm() {
   const [vType, setVType] = useState<'car' | 'motorcycle'>('car');
   const [brand, setBrand] = useState('');
   const [series, setSeries] = useState('');
+  const [customBrand, setCustomBrand] = useState('');
+  const [customSeries, setCustomSeries] = useState('');
   const [description, setDescription] = useState('');
   const [address, setAddress] = useState('');
   const [schedule, setSchedule] = useState('');
@@ -110,7 +113,9 @@ export default function RequestForm() {
       // Simulate processing delay
       await new Promise(resolve => setTimeout(resolve, 1500));
 
-      const vehicleName = `[${vType.toUpperCase()}] ` + ([brand, series].filter(Boolean).join(' ') || 'Unknown Unit');
+      const finalBrand = brand === 'Other' ? customBrand : brand;
+      const finalSeries = series === 'Other' ? customSeries : series;
+      const vehicleName = `[${vType.toUpperCase()}] ` + ([finalBrand, finalSeries].filter(Boolean).join(' ') || 'Unknown Unit');
       await createRequest(issueId, vehicleName, description, photoData, vType, sCategory, payMethod, schedule, address);
       setIsSuccess(true);
       // Mission state update in ServiceContext will trigger the UI transition
@@ -217,26 +222,92 @@ export default function RequestForm() {
                   </motion.div>
                 )}
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-[10px] uppercase text-zinc-500 font-black tracking-widest">{t.vehicleBrand}</label>
-                    <input
-                      value={brand}
-                      onChange={(e) => setBrand(e.target.value)}
-                      placeholder="e.g. Shelby"
-                      className="garrison-input"
-                    />
+                  <div className="space-y-4">
+                    <div className="space-y-2 relative">
+                      <label className="text-[10px] uppercase text-zinc-500 font-black tracking-widest">{t.vehicleBrand}</label>
+                      <div className="relative">
+                        <select
+                          value={brand}
+                          onChange={(e) => {
+                            setBrand(e.target.value);
+                            setSeries('');
+                          }}
+                          className="garrison-input appearance-none bg-zinc-900/50 pr-10"
+                        >
+                          <option value="">-- {language === 'id' ? 'Pilih Merek' : 'Select Brand'} --</option>
+                          {Object.keys(VEHICLE_DATA[vType]).sort().map(b => (
+                            <option key={b} value={b}>{b}</option>
+                          ))}
+                        </select>
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-600">
+                          <ChevronRight size={14} className="rotate-90" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <AnimatePresence>
+                      {brand === 'Other' && (
+                        <motion.div 
+                          initial={{ opacity: 0, height: 0 }} 
+                          animate={{ opacity: 1, height: 'auto' }} 
+                          exit={{ opacity: 0, height: 0 }}
+                          className="space-y-2"
+                        >
+                          <label className="text-[10px] uppercase text-zinc-500 font-black tracking-widest">{language === 'id' ? 'Ketik Merek' : 'Type Brand'}</label>
+                          <input
+                            value={customBrand}
+                            onChange={(e) => setCustomBrand(e.target.value)}
+                            placeholder={language === 'id' ? 'Contoh: Vespa' : 'e.g. Vespa'}
+                            className="garrison-input"
+                          />
+                        </motion.div>
+                      )}
+
+                      {brand && (
+                        <motion.div 
+                          initial={{ opacity: 0, height: 0 }} 
+                          animate={{ opacity: 1, height: 'auto' }} 
+                          exit={{ opacity: 0, height: 0 }}
+                          className="space-y-2 relative"
+                        >
+                          <label className="text-[10px] uppercase text-zinc-500 font-black tracking-widest">{t.vehicleSeries}</label>
+                          <div className="relative">
+                            <select
+                              value={series}
+                              onChange={(e) => setSeries(e.target.value)}
+                              className="garrison-input appearance-none bg-zinc-900/50 pr-10"
+                            >
+                              <option value="">-- {language === 'id' ? 'Pilih Model' : 'Select Model'} --</option>
+                                {brand !== 'Other' && VEHICLE_DATA[vType][brand as keyof typeof VEHICLE_DATA[typeof vType]]?.sort().map(m => (
+                                <option key={m} value={m}>{m}</option>
+                              ))}
+                              <option value="Other">{language === 'id' ? 'Lainnya...' : 'Other...'}</option>
+                            </select>
+                            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-600">
+                              <ChevronRight size={14} className="rotate-90" />
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+
+                      {series === 'Other' && (
+                        <motion.div 
+                          initial={{ opacity: 0, height: 0 }} 
+                          animate={{ opacity: 1, height: 'auto' }} 
+                          exit={{ opacity: 0, height: 0 }}
+                          className="space-y-2"
+                        >
+                          <label className="text-[10px] uppercase text-zinc-500 font-black tracking-widest">{language === 'id' ? 'Ketik Model' : 'Type Model'}</label>
+                          <input
+                            value={customSeries}
+                            onChange={(e) => setCustomSeries(e.target.value)}
+                            placeholder={language === 'id' ? 'Tahun / Tipe Modifikasi' : 'Year / Mod Type'}
+                            className="garrison-input"
+                          />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] uppercase text-zinc-500 font-black tracking-widest">{t.vehicleSeries}</label>
-                    <input
-                      value={series}
-                      onChange={(e) => setSeries(e.target.value)}
-                      placeholder="e.g. 2024 V8"
-                      className="garrison-input"
-                    />
-                  </div>
-                </div>
                 
                 <p className="text-[10px] text-zinc-600 leading-tight px-1 italic">
                   {t.vehicleHint}

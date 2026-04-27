@@ -12,12 +12,13 @@ import { useService } from '../ServiceContext';
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const isAuthPage = location.pathname === '/login';
   const { t, language, setLanguage } = useLanguage();
   const { user, role, isLoggedIn, signOut } = useUser();
   const { mission } = useService();
 
   const navItems = [
-    { name: role === 'workshop' || role === 'fuel-partner' ? 'Terminal' : t.nav.request, path: role === 'workshop' || role === 'fuel-partner' ? '/dashboard?tab=terminal' : '/', icon: Home, show: isLoggedIn, mobile: true },
+    { name: role === 'workshop' || role === 'fuel-partner' ? t.terminalActive : t.nav.request, path: role === 'workshop' || role === 'fuel-partner' ? '/dashboard?tab=terminal' : '/', icon: Home, show: isLoggedIn, mobile: true },
     { name: t.nav.hq, path: '/dashboard?tab=hq', icon: ClipboardList, show: (isLoggedIn && (role === 'workshop' || role === 'fuel-partner')), mobile: true },
     { name: t.nav.safety, path: '/safety', icon: Shield, show: isLoggedIn && role === 'driver', mobile: true },
     { name: t.nav.chat, path: '/chat', icon: MessageSquare, show: isLoggedIn, mobile: true },
@@ -146,47 +147,51 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </header>
 
       {/* Bottom Nav Mobile */}
-      <nav className="lg:hidden fixed bottom-6 left-6 right-6 z-[3000]">
-        <div className="glass-card flex items-center justify-around py-3 px-2 border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-          {navItems.filter(i => i.show && i.mobile).map((item) => {
-            const isActive = location.pathname === item.path;
-            return (
-              <Link 
-                key={item.path} 
-                to={item.path}
-                className={cn(
-                  "flex flex-col items-center gap-1 transition-all flex-1",
-                  isActive ? "text-garrison-blue" : "text-zinc-500"
-                )}
-              >
-                <div className={cn(
-                  "p-2 rounded-xl transition-all",
-                  isActive && "bg-garrison-blue/10 text-glow"
-                )}>
-                  <item.icon size={20} />
-                </div>
-                <span className="text-[8px] font-black uppercase tracking-widest">{item.name}</span>
-              </Link>
-            );
-          })}
-        </div>
-      </nav>
+      {isLoggedIn && navItems.filter(i => i.show && i.mobile).length > 0 && (
+        <nav className="lg:hidden fixed bottom-6 left-6 right-6 z-[3000]">
+          <div className="glass-card flex items-center justify-around py-3 px-2 border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+            {navItems.filter(i => i.show && i.mobile).map((item) => {
+              const isActive = location.pathname === item.path;
+              return (
+                <Link 
+                  key={item.path} 
+                  to={item.path}
+                  className={cn(
+                    "flex flex-col items-center gap-1 transition-all flex-1",
+                    isActive ? "text-garrison-blue" : "text-zinc-500"
+                  )}
+                >
+                  <div className={cn(
+                    "p-2 rounded-xl transition-all",
+                    isActive && "bg-garrison-blue/10 text-glow"
+                  )}>
+                    <item.icon size={20} />
+                  </div>
+                  <span className="text-[8px] font-black uppercase tracking-widest">{item.name}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </nav>
+      )}
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 lg:px-6 py-6 overflow-x-hidden">
         {children}
       </main>
 
-      <footer className="p-8 border-t border-white/5">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 opacity-40">
-          <div className="text-[10px] uppercase font-black tracking-[0.3em]">{t.footer.services}</div>
-          <div className="flex items-center gap-4">
-            <span className="text-[10px] uppercase font-black tracking-widest">{t.footer.builtBy}</span>
-            <div className="w-6 h-6 bg-white/[0.05] rounded-lg flex items-center justify-center">
-              <span className="italic font-black text-[10px]">G</span>
+      {!isAuthPage && (
+        <footer className="p-8 border-t border-white/5">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 opacity-40">
+            <div className="text-[10px] uppercase font-black tracking-[0.3em]">{t.footer.services}</div>
+            <div className="flex items-center gap-4">
+              <span className="text-[10px] uppercase font-black tracking-widest">{t.footer.builtBy}</span>
+              <div className="w-6 h-6 bg-white/[0.05] rounded-lg flex items-center justify-center">
+                <span className="italic font-black text-[10px]">G</span>
+              </div>
             </div>
           </div>
-        </div>
-      </footer>
+        </footer>
+      )}
     </div>
   );
 }

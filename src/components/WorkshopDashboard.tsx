@@ -177,7 +177,7 @@ export default function WorkshopDashboard() {
                  activeTab === 'terminal' ? "text-garrison-blue border-garrison-blue" : "text-zinc-600 border-transparent hover:text-zinc-400"
                )}
              >
-               Terminal
+               {t.terminalActive}
              </button>
              <button 
                onClick={() => handleTabChange('hq')}
@@ -380,7 +380,7 @@ export default function WorkshopDashboard() {
                                          className="garrison-btn-primary py-3 md:col-span-2 flex items-center justify-center gap-3"
                                        >
                                           <CheckCircle2 size={14} />
-                                          <span className="text-[10px] font-black uppercase tracking-widest">Submit Tactical Quote</span>
+                                          <span className="text-[10px] font-black uppercase tracking-widest">{language === 'id' ? 'Kirim Penawaran' : 'Submit Quote'}</span>
                                        </button>
                                      </div>
                                    )}
@@ -408,7 +408,7 @@ export default function WorkshopDashboard() {
                                      className="garrison-btn-primary flex-1 py-3 flex items-center justify-center gap-3 bg-blue-500 border-blue-500"
                                    >
                                       <Activity size={14} />
-                                      <span className="text-[10px] font-black uppercase tracking-widest">Start Moving</span>
+                                      <span className="text-[10px] font-black uppercase tracking-widest">{language === 'id' ? 'Mulai Jalan' : 'Start Journey'}</span>
                                    </button>
                                  )}
                                  {req.isReal && mission.id === req.id && mission.status === 'arriving' && (
@@ -417,7 +417,7 @@ export default function WorkshopDashboard() {
                                      className="garrison-btn-primary flex-1 py-3 flex items-center justify-center gap-3 bg-orange-500 border-orange-500"
                                    >
                                       <MapPin size={14} />
-                                      <span className="text-[10px] font-black uppercase tracking-widest">I Have Arrived</span>
+                                      <span className="text-[10px] font-black uppercase tracking-widest">{language === 'id' ? 'Saya Sudah Sampai' : 'I Have Arrived'}</span>
                                    </button>
                                  )}
                                  {req.isReal && mission.id === req.id && mission.status === 'arrived' && (
@@ -426,7 +426,7 @@ export default function WorkshopDashboard() {
                                      className="garrison-btn-primary flex-1 py-3 flex items-center justify-center gap-3 bg-green-500 border-green-500"
                                    >
                                       <CheckCircle2 size={14} />
-                                      <span className="text-[10px] font-black uppercase tracking-widest">Mark as Completed</span>
+                                      <span className="text-[10px] font-black uppercase tracking-widest">{language === 'id' ? 'Selesaikan Bantuan' : 'Mark Completed'}</span>
                                    </button>
                                  )}
                                  {req.isReal && req.id === mission.id && (mission.status === 'confirmed' || mission.status === 'arriving' || mission.status === 'arrived') && (
@@ -506,7 +506,9 @@ export default function WorkshopDashboard() {
         <div className="space-y-6 animate-slide-up">
            <div className="glass-card overflow-hidden">
               <div className="p-6 border-b border-white/5 flex items-center justify-between">
-                 <h3 className="font-black text-[11px] uppercase tracking-[0.3em] text-garrison-blue">AVAILABLE SCHEDULES</h3>
+                 <h3 className="font-black text-[11px] uppercase tracking-[0.3em] text-garrison-blue">
+                   {language === 'id' ? 'JADWAL LAYANAN' : 'AVAILABLE SCHEDULES'}
+                 </h3>
               </div>
               <div className="divide-y divide-white/5">
                  {activeMissions.filter(m => m.status === 'scheduled').length > 0 ? 
@@ -544,7 +546,7 @@ export default function WorkshopDashboard() {
                              selectedRequest === item.id && "border-garrison-blue text-white"
                            )}
                          >
-                            {selectedRequest === item.id ? 'Close' : 'Detail'}
+                            {selectedRequest === item.id ? (language === 'id' ? 'Tutup' : 'Close') : (language === 'id' ? 'Detil' : 'Detail')}
                          </button>
                          <button 
                            onClick={() => {
@@ -553,7 +555,7 @@ export default function WorkshopDashboard() {
                            }}
                            className="garrison-btn-primary px-6 py-2 text-[9px]"
                          >
-                            Accept
+                            {language === 'id' ? 'Terima' : 'Accept'}
                          </button>
                       </div>
                    </div>
@@ -584,7 +586,7 @@ export default function WorkshopDashboard() {
                              {item.photo && (
                                <div className="space-y-2">
                                   <span className="text-[9px] uppercase text-zinc-600 font-black tracking-widest flex items-center gap-2">
-                                     <Camera size={10} /> Visual Evidence
+                                     <Camera size={10} /> {language === 'id' ? 'Foto Kendaraan' : 'Vehicle Photo'}
                                   </span>
                                   <img src={item.photo} className="w-full aspect-video object-cover rounded-xl border border-white/10 grayscale" alt="Evidence" />
                                </div>
@@ -614,8 +616,8 @@ export default function WorkshopDashboard() {
                       <Activity className="text-garrison-blue" size={20} />
                    </div>
                    <div className="space-y-1">
-                      <h3 className="font-black text-xs uppercase tracking-[0.2em] text-white">Performance Metrics</h3>
-                      <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Operational Statistics</p>
+                      <h3 className="font-black text-xs uppercase tracking-[0.2em] text-white">{language === 'id' ? 'Metrik Performa' : 'Performance Stats'}</h3>
+                      <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">{language === 'id' ? 'Statistik Operasional' : 'Operational Stats'}</p>
                    </div>
                 </div>
                 <div className="grid grid-cols-2 gap-6">
@@ -624,7 +626,7 @@ export default function WorkshopDashboard() {
                       <p className="text-2xl font-black text-garrison-blue italic">{user?.rating?.toFixed(1) || '5.0'}</p>
                    </div>
                    <div className="space-y-1">
-                      <span className="text-[9px] uppercase text-zinc-600 font-black tracking-widest">Missions Done</span>
+                      <span className="text-[9px] uppercase text-zinc-600 font-black tracking-widest">{language === 'id' ? 'Bantuan Selesai' : 'Services Done'}</span>
                       <p className="text-2xl font-black text-white italic">{user?.ratingCount || '0'}</p>
                    </div>
                 </div>
@@ -640,7 +642,9 @@ export default function WorkshopDashboard() {
                 </div>
                 
                 <div className="w-full pt-4 border-t border-white/5 space-y-4">
-                  <span className="text-[9px] uppercase text-zinc-600 font-black tracking-widest block text-center">Intercom Channel 01</span>
+                  <span className="text-[9px] uppercase text-zinc-600 font-black tracking-widest block text-center">
+                    {language === 'id' ? 'Saluran Bantuan 01' : 'Support Channel 01'}
+                  </span>
                   <button 
                     onMouseDown={(e) => {
                       e.currentTarget.classList.add('bg-garrison-blue', 'text-black', 'shadow-[0_0_20px_rgba(0,242,255,0.5)]');
@@ -657,8 +661,10 @@ export default function WorkshopDashboard() {
                     className="w-full py-8 rounded-full border-2 border-garrison-blue/30 text-garrison-blue flex flex-col items-center justify-center gap-2 transition-all active:scale-95 group relative"
                   >
                     <div className="status-pulse w-3 h-3 mb-2" />
-                    <span className="text-xs font-black uppercase tracking-[0.3em]">{t.holdToSpeak || 'HOLD TO SPEAK'}</span>
-                    <span className="text-[8px] font-bold opacity-40 uppercase tracking-widest">Secure Channel Active</span>
+                    <span className="text-xs font-black uppercase tracking-[0.3em]">{t.holdToSpeak || 'TEKAN UNTUK BICARA'}</span>
+                    <span className="text-[8px] font-bold opacity-40 uppercase tracking-widest">
+                      {language === 'id' ? 'Koneksi Aman Aktif' : 'Secure Connection Active'}
+                    </span>
                   </button>
                   <p className="text-[8px] text-zinc-600 text-center uppercase tracking-widest italic">{t.intercomHint || 'Use intercom for direct tactical relay'}</p>
                 </div>
@@ -667,7 +673,9 @@ export default function WorkshopDashboard() {
 
           <div className="glass-card overflow-hidden">
              <div className="p-6 border-b border-white/5 flex items-center justify-between">
-                <h3 className="font-black text-[11px] uppercase tracking-[0.3em] text-garrison-blue">MISSION FEEDBACK LOG</h3>
+                <h3 className="font-black text-[11px] uppercase tracking-[0.3em] text-garrison-blue">
+                   {language === 'id' ? 'LOG ULASAN BANTUAN' : 'SERVICE REVIEWS'}
+                </h3>
              </div>
              <div className="divide-y divide-white/5">
                 {history.length > 0 ? history.map((item) => (
@@ -687,7 +695,7 @@ export default function WorkshopDashboard() {
                               ))}
                            </div>
                            {item.rating && (
-                             <span className="text-[8px] font-black text-garrison-blue uppercase tracking-widest">{item.rating.toFixed(1)} STARS</span>
+                             <span className="text-[8px] font-black text-garrison-blue uppercase tracking-widest">{item.rating.toFixed(1)} {language === 'id' ? 'BINTANG' : 'STARS'}</span>
                            )}
                         </div>
                      </div>
@@ -704,7 +712,7 @@ export default function WorkshopDashboard() {
                      </div>
                   </div>
                 )) : (
-                  <div className="p-12 text-center text-[10px] uppercase tracking-widest text-zinc-600 font-black">NO OPERATIONAL HISTORY DETECTED</div>
+                  <div className="p-12 text-center text-[10px] uppercase tracking-widest text-zinc-600 font-black">{language === 'id' ? 'BELUM ADA RIWAYAT OPERASIONAL' : 'NO SERVICE HISTORY DETECTED'}</div>
                 )}
              </div>
           </div>

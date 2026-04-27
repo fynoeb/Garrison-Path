@@ -6,8 +6,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Map, ArrowLeft } from 'lucide-react';
+import { useLanguage } from '../LanguageContext';
 
 export default function NotFound() {
+  const { language } = useLanguage();
+  
   return (
     <div className="min-h-[80vh] flex items-center justify-center">
       <div className="max-w-md w-full text-center space-y-8">
@@ -17,8 +20,12 @@ export default function NotFound() {
         </div>
         
         <div className="space-y-2">
-          <h2 className="text-3xl font-black text-white uppercase tracking-tighter italic">Out of Bounds</h2>
-          <p className="text-zinc-500 text-sm font-medium">You have ventured into unmapped territory. Re-establish contact with the main sector.</p>
+          <h2 className="text-3xl font-black text-white uppercase tracking-tighter italic">
+            {language === 'id' ? 'Halaman Tidak Ditemukan' : 'Page Not Found'}
+          </h2>
+          <p className="text-zinc-500 text-sm font-medium">
+            {language === 'id' ? 'Sepertinya Anda tersesat. Mari kembali ke rute yang benar.' : 'You have ventured into unmapped territory. Re-establish contact with the main sector.'}
+          </p>
         </div>
 
         <Link 
@@ -26,7 +33,7 @@ export default function NotFound() {
           className="inline-flex items-center gap-3 px-8 py-4 bg-garrison-blue text-white font-black uppercase tracking-widest text-[10px] hover:scale-105 transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)]"
         >
           <ArrowLeft className="w-3 h-3" />
-          Return to HQ
+          {language === 'id' ? 'Kembali ke Beranda' : 'Return Home'}
         </Link>
       </div>
     </div>
