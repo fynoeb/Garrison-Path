@@ -1,0 +1,6 @@
+{
+  "name": "Garrison Path",
+  "description": "Tactical navigation and safety pathfinder for vehicle damage or obstacles. Built by Funfayct.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": []
+}

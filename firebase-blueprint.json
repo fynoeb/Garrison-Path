@@ -1,0 +1,125 @@
+{
+  "entities": {
+    "user": {
+      "title": "User Profile",
+      "description": "Stores user information and their role (driver or workshop).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string", "enum": ["driver", "workshop", "fuel-partner"] },
+        "phone": { "type": "string" },
+        "isNew": { "type": "boolean" },
+        "isAvailable": { "type": "boolean", "description": "Workshop online/offline status" },
+        "rating": { "type": "number" },
+        "ratingCount": { "type": "number" },
+        "vehicle": {
+          "type": "object",
+          "properties": {
+            "brand": { "type": "string" },
+            "series": { "type": "string" }
+          }
+        },
+        "workshopName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "email", "role"]
+    },
+    "mission": {
+      "title": "Mission",
+      "description": "Represents a service request.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "driverId": { "type": "string" },
+        "workshopId": { "type": "string" },
+        "status": { "type": "string", "enum": ["idle", "searching", "confirmed", "arriving", "arrived", "completed", "cancelled"] },
+        "serviceCategory": { "type": "string", "enum": ["emergency", "home-service", "fuel-delivery"] },
+        "issue": { "type": "string" },
+        "description": { "type": "string" },
+        "photo": { "type": "string" },
+        "vehicle": { "type": "string" },
+        "vehicleType": { "type": "string", "enum": ["car", "motorcycle"] },
+        "estimatedPrice": { "type": "number" },
+        "offers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "workshopId": { "type": "string" },
+              "workshopName": { "type": "string" },
+              "price": { "type": "number" },
+              "eta": { "type": "string" },
+              "createdAt": { "type": "string" }
+            }
+          }
+        },
+        "rating": { "type": "number" },
+        "userLocation": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          }
+        },
+        "operativeLocation": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "driverId", "status", "userLocation"]
+    },
+    "chat": {
+      "title": "Chat Room",
+      "description": "A chat room associated with a mission.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "requestId": { "type": "string" },
+        "participants": { 
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "requestId", "participants"]
+    },
+    "chatMessage": {
+      "title": "Chat Message",
+      "description": "A message within a chat room.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "chatId": { "type": "string" },
+        "senderId": { "type": "string" },
+        "text": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "chatId", "senderId", "text", "createdAt"]
+    }
+  },
+  "firestore": {
+    "users": {
+      "schema": "user",
+      "description": "User profile records."
+    },
+    "missions": {
+      "schema": "mission",
+      "description": "Active emergency service requests."
+    },
+    "chats": {
+      "schema": "chat",
+      "description": "Chat rooms for missions."
+    },
+    "chats/{chatId}/messages": {
+      "schema": "chatMessage",
+      "description": "Messages within a chat room."
+    }
+  }
+}
